@@ -99,6 +99,14 @@ export const asyncRoutes = [
           icon: 'codepen-fill',
         }
       },
+      {
+        path: 'user',
+        name: 'user',
+        component: () => import('@/views/vab/user'),
+        meta: {
+          title: '测试',
+        }
+      }
     ],
   },
   {

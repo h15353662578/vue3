@@ -7,45 +7,54 @@
     :loading="loading"
     @change="handleTableChange"
   ></a-table>
-  <a-steps>
-    <a-step status="finish" title="Login">
-      <a-icon slot1="icon" type="user" />
-    </a-step>
-    <a-step status="finish" title="Verification">
-      <a-icon slot2="icon" type="solution" />
-    </a-step>
-    <a-step status="process" title="Pay">
-      <a-icon slot3="icon" type="loading" />
-    </a-step>
-    <a-step status="wait" title="Done">
-      <a-icon slot4="icon" type="smile-o" />
-    </a-step>
-  </a-steps>
 </template>
 <script>
-import { getList } from '@/api/table'
+import { getList } from '@/api/use'
 const columns = [
   {
-    title: '商品名',
-    dataIndex: 'comName',
+    title: '订单id',
+    dataIndex: 'orderId',
+    slots: { customRender: 'orderId' },
   },
   {
-    title: '商品价格',
-    dataIndex: 'comPrice',
+    title: '订单商品名',
+    dataIndex: 'orderStoreName',
+    slots: { customRender: 'orderStoreName' },
   },
   {
-    title: '品牌',
-    dataIndex: 'comBrand',
+    title: '订单价格',
+    dataIndex: 'orderStorePrice',
+    slots: { customRender: 'orderStorePrice' },
   },
   {
-    title: '状态',
-    dataIndex: 'comStatus',
+    title: '订单数量',
+    dataIndex: 'orderStoreMath',
+    slots: { customRender: 'orderStoreMath' },
   },
   {
-    title: '操作',
-    dataIndex: 'operation',
+    title: '订单合计',
+    dataIndex: 'orderStoreTot',
+    slots: { customRender: 'orderStoreTot' },
+  },
+  {
+    title: '订单状态',
+    dataIndex: 'orderStatus',
+    slots: { customRender: 'orderStatus' },
+  },
+  {
+    title: '订单地址',
+    dataIndex: 'orderUserAddress',
+    slots: { customRender: 'orderUserAddress' },
+  },
+  {
+    title: '',
+    dataIndex: '',
+    slots: { customRender: 'operation' },
   },
 ]
+
+const data = []
+data.push({})
 
 export default {
   data() {
@@ -64,26 +73,37 @@ export default {
   mounted() {
     this.fetch()
   },
-  props: {},
-  methods: {},
-  handleTableChange(pagination) {
-    const pager = { ...this.pagination }
-    pager.current = pagination.current
-    this.pagination = pager
-    this.fetch()
+  props: {
+    text: String,
   },
-  fetch() {
-    this.loading = true
-    getList({
-      pageSize: this.pagination.pageSize,
-      current: this.pagination.current,
-    }).then(({ data, total }) => {
-      const pagination = { ...this.pagination }
-      pagination.total = total
-      this.loading = false
-      this.data = data
-      this.pagination = pagination
-    })
+  methods: {
+    handleTableChange(pagination) {
+      const pager = { ...this.pagination }
+      pager.current = pagination.current
+      this.pagination = pager
+      this.fetch()
+    },
+    fetch() {
+      this.loading = true
+      getList({
+        pageSize: this.pagination.pageSize,
+        current: this.pagination.current,
+      }).then(({ data, total }) => {
+        const pagination = { ...this.pagination }
+        pagination.total = total
+        this.loading = false
+        this.data = data
+        this.pagination = pagination
+      })
+    },
+    handleChange(value, key, column) {
+      const newData = [...this.data]
+      const target = newData.filter((item) => key === item.key)[0]
+      if (target) {
+        target[column] = value
+        this.data = newData
+      }
+    },
   },
 }
 </script>
