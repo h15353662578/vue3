@@ -15,6 +15,12 @@ export const deleteList = (data) => {
   })
 }
 
-
+export const editList = (data) => {
+  return axios.request({
+    method: 'post',
+    url: 'http://localhost:8080/store/saveStore',
+    data,
+  })
+}
 
 

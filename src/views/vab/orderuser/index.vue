@@ -10,7 +10,7 @@
     <template #operation2="{ text, record }">
       <a-popconfirm
         :title="text == undefined ? '' + '确定要删除吗' : text"
-        @confirm="onDelete(record.id)"
+        @confirm="onDelete(record.orderId)"
       >
         <a>删除</a>
       </a-popconfirm>
@@ -38,7 +38,7 @@ const columns = [
   },
   {
     title: '操作',
-    dataIndex: 'operation',
+    dataIndex: 'operation2',
     slots: { customRender: 'operation2' },
   },
 ]

@@ -35,14 +35,14 @@
     <template #operation="{ record }">
       <div class="editable-row-operations">
         <span v-if="record.editable">
-          <a @click="save(record.orderId)">Save</a>
+          <a @click="save(record.orderId)">确定</a>
         </span>
-        <span v-else>
+        <span v-else @click="edit(record.key)">
           <a
             v-bind="editingKey !== '' ? { disabled: 'disabled' } : {}"
-            @click="edit(record.key)"
+            @click="edit(record.orderId)"
           >
-            Edit
+            修改
           </a>
         </span>
       </div>
@@ -107,8 +107,18 @@ const columns = [
   },
 ]
 
+let key = 0
 const data = []
-data.push({})
+data.push({
+  key: 0,
+  orderId: '',
+  orderStoreName: '',
+  orderStorePrice: '',
+  orderStoreMath: '',
+  orderStoreTot: '',
+  orderStatus: '',
+  orderUserAddress: '',
+})
 
 export default {
   data() {
@@ -148,7 +158,14 @@ export default {
         const pagination = { ...this.pagination }
         pagination.total = total
         this.loading = false
-        this.data = data
+        // this.data = data
+        this.data = data.map((item) => {
+          key++
+          return {
+            key,
+            ...item,
+          }
+        })
         this.pagination = pagination
       })
     },

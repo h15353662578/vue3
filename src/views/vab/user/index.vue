@@ -6,10 +6,51 @@
     :pagination="pagination"
     :loading="loading"
     @change="handleTableChange"
-  ></a-table>
+  >
+    <template
+      v-for="col in [
+        'orderId',
+        'orderStoreName',
+        'orderStorePrice',
+        'orderStoreMath',
+        'orderStoreTot',
+        'orderStatus',
+        'orderUserAddress',
+      ]"
+      #[col]="{ text, record }"
+      :key="col"
+    >
+      <div>
+        <a-input
+          v-if="record.editable"
+          style="margin: -5px 0"
+          :value="text"
+          @change="(e) => handleChange(e.target.value, record.key, col)"
+        />
+        <template v-else>
+          {{ text }}
+        </template>
+      </div>
+    </template>
+    <template #operation="{ record }">
+      <div class="editable-row-operations">
+        <span v-if="record.editable">
+          <a @click="save(record.orderId)">Save</a>
+        </span>
+        <span v-else @click="edit(record.key)">
+          <a
+            v-bind="editingKey !== '' ? { disabled: 'disabled' } : {}"
+            @click="edit(record.orderId)"
+          >
+            Edit
+          </a>
+        </span>
+      </div>
+    </template>
+  </a-table>
 </template>
 <script>
-import { getList } from '@/api/use'
+import { getList, editList } from '@/api/use'
 const columns = [
   {
     title: '订单id',
@@ -47,17 +88,27 @@ const columns = [
     slots: { customRender: 'orderUserAddress' },
   },
   {
-    title: '',
-    dataIndex: '',
+    title: '操作',
+    dataIndex: 'operation',
     slots: { customRender: 'operation' },
   },
 ]
-
+let key = 0
 const data = []
-data.push({})
+data.push({
+  key: 0,
+  orderId: '',
+  orderStoreName: '',
+  orderStorePrice: '',
+  orderStoreMath: '',
+  orderStoreTot: '',
+  orderStatus: '',
+  orderUserAddress: '',
+})
 
 export default {
   data() {
+    this.cacheData = data.map((item) => ({ ...item }))
     return {
       data: [],
       pagination: {
@@ -68,6 +119,7 @@ export default {
       query: {},
       loading: false,
       columns,
+      editingKey: '',
     }
   },
   mounted() {
@@ -92,7 +144,13 @@ export default {
         const pagination = { ...this.pagination }
         pagination.total = total
         this.loading = false
-        this.data = data
+        this.data = data.map((item) => {
+          key++
+          return {
+            key,
+            ...item,
+          }
+        })
         this.pagination = pagination
       })
     },
@@ -103,6 +161,36 @@ export default {
         target[column] = value
         this.data = newData
       }
+    },
+    edit(key) {
+      const newData = [...this.data]
+      const target = newData.filter((item) => key === item.key)[0]
+
+      this.editingKey = key
+      if (target) {
+        target.editable = true
+        this.data = newData
+      }
+      editList(key).then(() => {})
+    },
+    save(key) {
+      const newData = [...this.data]
+      const newCacheData = [...this.cacheData]
+      const target = newData.filter((item) => key === item.orderId)[0]
+      const targetCache = newCacheData.filter((item) => {
+        key === item.orderId
+      })[0]
+      if (target && targetCache) {
+        delete target.editable
+        this.data = newData
+        Object.assign(targetCache, target)
+        this.cacheData = newCacheData
+      }
+      editList(target).then((res) => {
+        console.log(res)
+        this.editingKey = ''
+        this.fetch()
+      })
     },
   },
 }
