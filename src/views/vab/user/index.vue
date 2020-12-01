@@ -1,196 +1,80 @@
 <template>
-  <a-table
-    :columns="columns"
-    :row-key="(data) => data"
-    :data-source="data"
-    :pagination="pagination"
-    :loading="loading"
-    @change="handleTableChange"
-  >
-    <template
-      v-for="col in [
-        'orderId',
-        'orderStoreName',
-        'orderStorePrice',
-        'orderStoreMath',
-        'orderStoreTot',
-        'orderStatus',
-        'orderUserAddress',
-      ]"
-      #[col]="{ text, record }"
-      :key="col"
-    >
-      <div>
-        <a-input
-          v-if="record.editable"
-          style="margin: -5px 0"
-          :value="text"
-          @change="(e) => handleChange(e.target.value, record.key, col)"
-        />
-        <template v-else>
-          {{ text }}
-        </template>
-      </div>
-    </template>
-    <template #operation="{ record }">
-      <div class="editable-row-operations">
-        <span v-if="record.editable">
-          <a @click="save(record.orderId)">Save</a>
-        </span>
-        <span v-else @click="edit(record.key)">
-          <a
-            v-bind="editingKey !== '' ? { disabled: 'disabled' } : {}"
-            @click="edit(record.orderId)"
-          >
-            Edit
-          </a>
-        </span>
-      </div>
-    </template>
-  </a-table>
+  <a-form :model="data" :label-col="labelCol" :wrapper-col="wrapperCol">
+    <a-form-item label="用户姓名">
+      <a-input v-model:value="data.name" />
+    </a-form-item>
+    <a-form-item label="用户账号">
+      <a-input v-model:value="data.userName" />
+    </a-form-item>
+    <a-form-item label="账号密码">
+      <a-input v-model:value="data.password" />
+    </a-form-item>
+    <a-form-item label="年龄">
+      <a-input v-model:value="data.userAge" />
+    </a-form-item>
+    <a-form-item label="手机号">
+      <a-input v-model:value="data.userPhone" />
+    </a-form-item>
+    <a-form-item label="性别">
+      <a-input v-model:value="data.userSex" />
+    </a-form-item>
+    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+      <a-button type="primary" @click="onSubmit">新建</a-button>
+      <a-button style="margin-left: 10px">取消</a-button>
+    </a-form-item>
+  </a-form>
 </template>
 <script>
-import { getList, editList } from '@/api/use'
-const columns = [
-  {
-    title: '订单id',
-    dataIndex: 'orderId',
-    slots: { customRender: 'orderId' },
-  },
-  {
-    title: '订单商品名',
-    dataIndex: 'orderStoreName',
-    slots: { customRender: 'orderStoreName' },
-  },
-  {
-    title: '订单价格',
-    dataIndex: 'orderStorePrice',
-    slots: { customRender: 'orderStorePrice' },
-  },
-  {
-    title: '订单数量',
-    dataIndex: 'orderStoreMath',
-    slots: { customRender: 'orderStoreMath' },
-  },
-  {
-    title: '订单合计',
-    dataIndex: 'orderStoreTot',
-    slots: { customRender: 'orderStoreTot' },
-  },
-  {
-    title: '订单状态',
-    dataIndex: 'orderStatus',
-    slots: { customRender: 'orderStatus' },
-  },
-  {
-    title: '订单地址',
-    dataIndex: 'orderUserAddress',
-    slots: { customRender: 'orderUserAddress' },
-  },
-  {
-    title: '操作',
-    dataIndex: 'operation',
-    slots: { customRender: 'operation' },
-  },
-]
-let key = 0
+import { addUser } from '@/api/use'
+
 const data = []
 data.push({
   key: 0,
-  orderId: '',
-  orderStoreName: '',
-  orderStorePrice: '',
-  orderStoreMath: '',
-  orderStoreTot: '',
-  orderStatus: '',
-  orderUserAddress: '',
+  id: '',
+  name: '',
+  userName: '',
+  password: '',
+  userSex: '',
+  userAge: '',
+  userPhome: '',
 })
 
 export default {
   data() {
-    this.cacheData = data.map((item) => ({ ...item }))
     return {
-      data: [],
-      pagination: {
-        showLessItems: true,
-        showQuickJumper: true,
-        showSizeChanger: true,
+      data: {
+        name: '',
+        userName: '',
+        userAge: '',
+        userSex: '',
+        userPhone: '',
+        password: '',
+        data: [],
+        pagination: {
+          showLessItems: true,
+          showQuickJumper: true,
+          showSizeChanger: true,
+        },
+        query: {},
+        loading: false,
       },
-      query: {},
-      loading: false,
-      columns,
-      editingKey: '',
     }
   },
-  mounted() {
-    this.fetch()
-  },
+  mounted() {},
   props: {
     text: String,
   },
   methods: {
-    handleTableChange(pagination) {
-      const pager = { ...this.pagination }
-      pager.current = pagination.current
-      this.pagination = pager
-      this.fetch()
-    },
-    fetch() {
-      this.loading = true
-      getList({
-        pageSize: this.pagination.pageSize,
-        current: this.pagination.current,
-      }).then(({ data, total }) => {
-        const pagination = { ...this.pagination }
-        pagination.total = total
-        this.loading = false
-        this.data = data.map((item) => {
-          key++
-          return {
-            key,
-            ...item,
-          }
-        })
-        this.pagination = pagination
-      })
-    },
-    handleChange(value, key, column) {
-      const newData = [...this.data]
-      const target = newData.filter((item) => key === item.key)[0]
-      if (target) {
-        target[column] = value
-        this.data = newData
-      }
-    },
-    edit(key) {
-      const newData = [...this.data]
-      const target = newData.filter((item) => key === item.key)[0]
-
-      this.editingKey = key
-      if (target) {
-        target.editable = true
-        this.data = newData
-      }
-      editList(key).then(() => {})
-    },
-    save(key) {
-      const newData = [...this.data]
-      const newCacheData = [...this.cacheData]
-      const target = newData.filter((item) => key === item.orderId)[0]
-      const targetCache = newCacheData.filter((item) => {
-        key === item.orderId
-      })[0]
-      if (target && targetCache) {
-        delete target.editable
-        this.data = newData
-        Object.assign(targetCache, target)
-        this.cacheData = newCacheData
-      }
-      editList(target).then((res) => {
-        console.log(res)
-        this.editingKey = ''
+    onAdd(key) {
+      addUser(key).then(() => {
         this.fetch()
       })
+    },
+    onSubmit(key) {
+      addUser(key).then(() => {
+        this.fetch()
+      })
+      console.log('submit', this.form)
     },
   },
 }
