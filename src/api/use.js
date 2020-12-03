@@ -29,5 +29,16 @@ export const addUser = (data) => {
         method: 'put',
         url: 'http://localhost:8080/user/addUser',
         data,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
+export const likeUser = (data) => {
+    return axios.request({
+        method: 'get',
+        url: 'http://localhost:8080/user/likename',
+        data,
     })
 }

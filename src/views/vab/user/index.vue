@@ -1,5 +1,9 @@
 <template>
+  <a-button type="primary" shape="circle" @click="SearchOutlined">
+    <template #icon><SearchOutlined /></template>
+  </a-button>
   <a-form :model="data" :label-col="labelCol" :wrapper-col="wrapperCol">
+    <!-- :datasource="data" -->
     <a-form-item label="用户姓名">
       <a-input v-model:value="data.name" />
     </a-form-item>
@@ -25,44 +29,37 @@
   </a-form>
 </template>
 <script>
-import { addUser } from '@/api/use'
-
-const data = []
-data.push({
-  key: 0,
-  id: '',
-  name: '',
-  userName: '',
-  password: '',
-  userSex: '',
-  userAge: '',
-  userPhome: '',
-})
+import { addUser, likeUser } from '@/api/use'
+import { SearchOutlined } from '@ant-design/icons-vue'
 
 export default {
   data() {
     return {
+      wrapperCol: { span: 4 },
       data: {
         name: '',
         userName: '',
+        userPhone: '',
         userAge: '',
         userSex: '',
-        userPhone: '',
         password: '',
-        data: [],
-        pagination: {
-          showLessItems: true,
-          showQuickJumper: true,
-          showSizeChanger: true,
-        },
-        query: {},
-        loading: false,
       },
+      dataList: [],
+      pagination: {
+        showLessItems: true,
+        showQuickJumper: true,
+        showSizeChanger: true,
+      },
+      query: {},
+      loading: false,
     }
   },
   mounted() {},
   props: {
     text: String,
+  },
+  components: {
+    SearchOutlined,
   },
   methods: {
     onAdd(key) {
@@ -70,11 +67,15 @@ export default {
         this.fetch()
       })
     },
-    onSubmit(key) {
-      addUser(key).then(() => {
-        this.fetch()
-      })
-      console.log('submit', this.form)
+    SearchOutlined() {
+      likeUser(this.data)
+    },
+
+    onSubmit() {
+      this.dataList.push(this.data)
+      addUser(JSON.stringify(this.dataList[0])).then(() => {})
+      console.log('submit', this.data)
+      location.reload()
     },
   },
 }

@@ -11,7 +11,7 @@ export const getList = (data) => {
 export const deleteList = (data) => {
   return axios.request({
     method: 'delete',
-    url: 'http://localhost:8080/store/deleteUserById?id=' + data
+    url: 'http://localhost:8080/store/deleteStoreById?id=' + data
   })
 }
 
