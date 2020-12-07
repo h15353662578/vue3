@@ -29,7 +29,7 @@
   </a-form>
 </template>
 <script>
-import { addUser, likeUser } from '@/api/use'
+import { addUser } from '@/api/use'
 import { SearchOutlined } from '@ant-design/icons-vue'
 
 export default {
@@ -64,18 +64,15 @@ export default {
   methods: {
     onAdd(key) {
       addUser(key).then(() => {
-        this.fetch()
+        // location.reload()
       })
-    },
-    SearchOutlined() {
-      likeUser(this.data)
     },
 
     onSubmit() {
       this.dataList.push(this.data)
       addUser(JSON.stringify(this.dataList[0])).then(() => {})
       console.log('submit', this.data)
-      location.reload()
+      // location.reload()
     },
   },
 }

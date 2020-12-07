@@ -34,11 +34,3 @@ export const addUser = (data) => {
         }
     })
 }
-
-export const likeUser = (data) => {
-    return axios.request({
-        method: 'get',
-        url: 'http://localhost:8080/user/likename',
-        data,
-    })
-}

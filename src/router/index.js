@@ -104,9 +104,23 @@ export const asyncRoutes = [
         name: 'user',
         component: () => import('@/views/vab/user'),
         meta: {
-          title: '测试',
-        }
+          title: '新建用户',
+          icon: 'account-circle-line'
+        },
+      },
+      {
+        path: 'store',
+        name: 'store',
+        component: () => import('@/views/vab/addstore'),
+        meta: {
+          title: '新建商品',
+          icon: 'shopping-bag-2-line'
+        },
       }
+
+
+
+
     ],
   },
   {
