@@ -3,7 +3,6 @@
     <template #icon><SearchOutlined /></template>
   </a-button>
   <a-form :model="data" :label-col="labelCol" :wrapper-col="wrapperCol">
-    <!-- :datasource="data" -->
     <a-form-item label="商品名">
       <a-input v-model:value="data.comName" />
     </a-form-item>
@@ -63,16 +62,13 @@ export default {
   },
   methods: {
     onAdd(key) {
-      addStore(key).then(() => {
-        location.reload()
-      })
+      addStore(key).then(() => {})
     },
 
     onSubmit() {
       this.dataList.push(this.data)
       addStore(JSON.stringify(this.dataList[0])).then(() => {})
       console.log('submit', this.data)
-      location.reload()
     },
   },
 }

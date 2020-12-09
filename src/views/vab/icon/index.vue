@@ -115,6 +115,9 @@ export default {
   mounted() {
     this.fetch()
   },
+  get() {
+    this.$router.go(0)
+  },
   props: {
     text: String,
   },

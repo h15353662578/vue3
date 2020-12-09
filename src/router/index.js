@@ -116,33 +116,18 @@ export const asyncRoutes = [
           title: '新建商品',
           icon: 'shopping-bag-2-line'
         },
-      }
-
-
-
-
-    ],
-  },
-  {
-    path: '/test',
-    component: Layout,
-    redirect: '/test/test',
-    meta: {
-      title: '动态路由测试',
-      icon: 'test-tube-line',
-    },
-    children: [
+      },
       {
         path: 'test',
-        name: 'Test',
-        component: () => import('@/views/test'),
+        name: 'test',
+        link: 'http://127.0.0.1:5500/src/app/pages/test/test.html',
         meta: {
-          title: '动态路由测试',
-          icon: 'test-tube-line',
-        },
+          title: 'test',
+        }
       },
     ],
   },
+
   {
     path: '/error',
     name: 'Error',

@@ -33,6 +33,7 @@ import { addUser } from '@/api/use'
 import { SearchOutlined } from '@ant-design/icons-vue'
 
 export default {
+  inject: ['reload'],
   data() {
     return {
       wrapperCol: { span: 4 },
@@ -63,16 +64,16 @@ export default {
   },
   methods: {
     onAdd(key) {
-      addUser(key).then(() => {
-        // location.reload()
-      })
+      addUser(key).then(() => {})
     },
-
+    get() {
+      this.$router.go(0)
+    },
     onSubmit() {
+      this.reload()
       this.dataList.push(this.data)
       addUser(JSON.stringify(this.dataList[0])).then(() => {})
       console.log('submit', this.data)
-      // location.reload()
     },
   },
 }

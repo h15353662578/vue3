@@ -18,14 +18,10 @@
     <div class="version-information-table">
       <table>
         <tr>
-          <td></td>
+          <td>当前时间</td>
           <td>
-            <a>
-              <img />
-            </a>
+          <span>{{formatDateTime}}</span>
           </td>
-          <td></td>
-          <td></td>
         </tr>
         <tr>
           <td>vue</td>
@@ -65,12 +61,43 @@ import { dependencies, devDependencies } from '*/package.json'
 export default {
   data() {
     return {
+      date: new Date(),
       updateTime: process.env.VUE_APP_UPDATE_TIME,
       dependencies: dependencies,
       devDependencies: devDependencies,
     }
   },
+   computed:{
+      formatDateTime(){
+          let y = this.date.getFullYear();
+
+          let MM = this.date.getMonth()+1;
+
+          MM = MM < 10 ? "0" + MM : MM;
+
+          let d = this.date.getDate();
+
+          d = d < 10 ? "0" + d : d;
+
+          let h = this.date.getHours();
+
+          h = h < 10 ? "0" + h : h;
+
+          let m = this.date.getMinutes();
+
+          m = m < 10 ? "0" + m : m;
+
+          let s = this.date.getSeconds();
+
+          s = s <10 ? "0" + s : s;
+
+          return y + '-' + MM + "-" + d + " " + h + ":" +m +":" + s;
+
+      }
+
+  },
 }
+
 </script>
 <style lang="less" scoped>
 .version-information {

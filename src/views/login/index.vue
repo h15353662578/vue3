@@ -5,7 +5,7 @@
       <a-col :xs="24" :sm="24" :md="12" :lg="10" :xl="6">
         <div class="login-container-form">
           <div class="login-container-hello">hello!</div>
-          <div class="login-container-title">欢迎来到 {{ title }}</div>
+          <div class="login-container-title">欢迎来到 华生贩卖机</div>
           <a-form :model="form" @submit="handleSubmit" @submit.prevent>
             <a-form-item>
               <a-input v-model:value="form.username" placeholder="Username">
@@ -112,7 +112,7 @@ export default {
       await this.$router.push(this.handleRoute())
     },
     goQther() {
-      window.location.href = 'http://xmall.exrick.cn/#/home'
+      window.location.href = 'http://localhost:8082/'
     },
   },
 }
