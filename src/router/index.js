@@ -102,7 +102,7 @@ export const asyncRoutes = [
       {
         path: 'user',
         name: 'user',
-        component: () => import('@/views/vab/user'),
+        component: () => import('@/views/vab/adduser'),
         meta: {
           title: '新建用户',
           icon: 'account-circle-line'
@@ -120,7 +120,8 @@ export const asyncRoutes = [
       {
         path: 'test',
         name: 'test',
-        link: 'http://127.0.0.1:5500/src/app/pages/test/test.html',
+        // url: 'http://127.0.0.1:5500/src/app/pages/test/test.html',
+        component: () => import('@/views/vab/test'),
         meta: {
           title: 'test',
         }

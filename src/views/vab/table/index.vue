@@ -9,7 +9,7 @@
   >
     <template #operation1="{ text, record }">
       <a-popconfirm
-        :title="text == undefined ? '' + '确定要删除吗' : text"
+        :title="text == undefined ? '' + '确定要下架吗' : text"
         @confirm="onDelete(record.id)"
       >
         <a>下架</a>
