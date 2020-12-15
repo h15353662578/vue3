@@ -55,7 +55,6 @@ const columns = [
   {
     title: '用户ID',
     dataIndex: 'id',
-    slots: { customRender: 'id' },
   },
   {
     title: '用户姓名',

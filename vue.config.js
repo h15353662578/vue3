@@ -64,7 +64,7 @@ module.exports = {
     // 注释掉的地方是前端配置代理访问后端的示例
     // proxy: {
     //   [baseURL]: {
-    //     target: `http://localhost:/8080`,
+    //     target: `http://localhost:/8086`,
     //     ws: true,
     //     changeOrigin: true,
     //     pathRewrite: {

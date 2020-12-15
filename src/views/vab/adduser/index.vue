@@ -28,7 +28,7 @@
     </a-form-item>
     <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
       <a-button type="primary" @click="onSubmit">新建</a-button>
-      <a-button style="margin-left: 10px">取消</a-button>
+      <a-button tyep="dashed" @click="Refe">取消</a-button>
     </a-form-item>
   </a-form>
 </template>
@@ -121,6 +121,9 @@ export default {
         console.log('submit', this.data)
         location.reload()
       })
+    },
+    Refe() {
+      window.location.reload()
     },
   },
 }

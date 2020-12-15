@@ -3,7 +3,7 @@ import axios from 'axios'
 export const getList = (data) => {
   return axios.request({
     method: 'get',
-    url: 'http://localhost:8080/user/findAll',
+    url: 'http://localhost:8086/user/findAll',
     data
   })
 }
@@ -11,7 +11,7 @@ export const getList = (data) => {
 export const editList = (data) => {
   return axios.request({
     method: 'post',
-    url: 'http://localhost:8080/user/save',
+    url: 'http://localhost:8086/user/save',
     data,
   })
 }
@@ -19,7 +19,7 @@ export const editList = (data) => {
 export const likeUser = (data) => {
   return axios.request({
     method: 'get',
-    url: 'http://localhost:8080/user/likename',
+    url: 'http://localhost:8086/user/likename',
     data,
   })
 }
